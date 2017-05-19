@@ -94,6 +94,26 @@ func (i Int) Iter() Iterator                   { panic(NotImplemented) }
 
 var _ Value = Int(0)
 
+type Bool struct {
+	Stub
+	value bool
+}
+
+func (b Bool) Eval(ctx Ctx) Value { return b }
+func (b Bool) True() bool         { return b.value }
+
+var (
+	True  Bool = Bool{value: true}
+	False Bool = Bool{value: false}
+)
+
+func ToBool(value bool) Bool {
+	if value {
+		return True
+	}
+	return False
+}
+
 type RangeIterator struct {
 	RefStub
 	current, stop int

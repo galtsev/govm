@@ -59,14 +59,32 @@ func (n SubNode) Eval(ctx Ctx) Value {
 }
 
 type IfNode struct {
-	cond, then, _else Node
+	cond, then, else_ Node
+}
+
+type EqNode struct {
+	left, right Node
+}
+
+func (n EqNode) Eval(ctx Ctx) Value {
+	return ToBool(n.left.Eval(ctx).Compare(n.right.Eval(ctx)).(Int) == Int(0))
+}
+
+var _ Node = EqNode{}
+
+type GtNode struct {
+	left, right Node
+}
+
+func (n GtNode) Eval(ctx Ctx) Value {
+	return ToBool(n.left.Eval(ctx).Compare(n.right.Eval(ctx)).(Int) == Int(1))
 }
 
 func (n IfNode) Eval(ctx Ctx) Value {
 	if n.cond.Eval(ctx).True() {
 		return n.then.Eval(ctx)
 	} else {
-		return n._else.Eval(ctx)
+		return n.else_.Eval(ctx)
 	}
 }
 
